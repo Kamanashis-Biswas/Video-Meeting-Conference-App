@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">VideoMeeting</string>
+    <string name="welcome_to">Welcome To</string>
+    <string name="video_meeting_conference_app">Video Meeting | Conference App</string>
+    <string name="sign_in_to_your_account">sign in to your account</string>
+    <string name="email">Email</string>
+</resources>
