@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
 }
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -55,4 +56,8 @@ dependencies {
 
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
+    implementation 'com.google.firebase:firebase-firestore:22.1.0'
 }

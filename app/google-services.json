@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "221045018010",
+    "project_id": "video-metting-823ac",
+    "storage_bucket": "video-metting-823ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221045018010:android:0bd064a90a60f163f7fe23",
+        "android_client_info": {
+          "package_name": "com.example.videomeeting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221045018010-5ovgf8ogmp4845fpgtbucn0q780ou4ai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwzKGIJcFS8C0hagfDvK_L4p3Lz9iDWFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221045018010-5ovgf8ogmp4845fpgtbucn0q780ou4ai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
