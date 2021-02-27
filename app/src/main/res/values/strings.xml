@@ -16,4 +16,5 @@
     <string name="biswas">Biswas</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
