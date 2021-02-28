@@ -1,25 +1,37 @@
 package com.example.videomeeting.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.videomeeting.R;
+import com.example.videomeeting.adapters.UsersAdapter;
+import com.example.videomeeting.models.User;
 import com.example.videomeeting.utilities.Constants;
 import com.example.videomeeting.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private PreferenceManager preferenceManager;
+    private List<User> users;
+    private UsersAdapter usersAdapter;
+    private TextView textErrorMessage;
+    private ProgressBar userProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +53,55 @@ public class MainActivity extends AppCompatActivity {
                 sendFCMTokenToDatabase(task.getResult().getToken());
             }
         });
+
+        RecyclerView usersRecyclerView = findViewById(R.id.usersRecyclerView);
+
+        textErrorMessage = findViewById(R.id.textErrorMessage);
+        userProgressBar = findViewById(R.id.userProgressBar);
+
+        users = new ArrayList<>();
+        usersAdapter = new UsersAdapter(users);
+        usersRecyclerView.setAdapter(usersAdapter);
+
+        getUsers();
+
     }
+
+    private void getUsers(){
+        userProgressBar.setVisibility(View.VISIBLE);
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    userProgressBar.setVisibility(View.GONE);
+                    String myUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    if (task.isSuccessful() && task.getResult() != null){
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            if (myUserId.equals(documentSnapshot.getId())){
+                                continue;
+                            }
+                            User user = new User();
+                            user.fastName = documentSnapshot.getString(Constants.KEY_FIRST_NAME);
+                            user.lastName = documentSnapshot.getString(Constants.KEY_LAST_NAME);
+                            user.email = documentSnapshot.getString(Constants.KEY_EMAIL);
+                            user.token = documentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+                            users.add(user);
+                        }
+
+                        if (users.size() > 0){
+                            usersAdapter.notifyDataSetChanged();
+                        }else{
+                            textErrorMessage.setText(String.format("%S", "No users available"));
+                            textErrorMessage.setVisibility(View.VISIBLE);
+                        }
+
+                    }else {
+                        textErrorMessage.setText(String.format("%S", "No users available"));
+                        textErrorMessage.setVisibility(View.VISIBLE);
+                    }
+                });
+    }
+
 
     private void sendFCMTokenToDatabase(String token){
         FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -50,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                         preferenceManager.getString(Constants.KEY_USER_ID)
                 );
         documentReference.update(Constants.KEY_FCM_TOKEN, token)
-                .addOnSuccessListener(aVoid -> Toast.makeText(MainActivity.this, "Token Updated successfully", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Unable to send token: " +e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
