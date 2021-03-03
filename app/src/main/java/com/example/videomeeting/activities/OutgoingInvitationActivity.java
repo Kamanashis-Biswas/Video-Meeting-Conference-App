@@ -70,6 +70,10 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
 
         ImageView imageStopInvitation = findViewById(R.id.imageStopInvitation);
         imageStopInvitation.setOnClickListener(view -> onBackPressed());
+
+        if (meetingType != null && user != null){
+            initiateMeeting(meetingType, user.token);
+        }
     }
 
     private void initiateMeeting(String meetingType, String receiverToken){
@@ -91,6 +95,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
             body.put(Constants.REMOTE_MSG_DATA, data);
             data.put(Constants.REMOTE_MSG_REGISTRATION_IDS, tokens);
 
+            sendRemoteMessage(body.toString(), Constants.REMOTE_MSG_INVITATION);
 
         }catch (Exception exception){
             Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
