@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_meeting_invitation"
-    tools:context=".activities.IncomingInvitationActivity">
+    tools:context=".activities.OutgoingInvitationActivity">
+
 
     <ImageView
         android:id="@+id/imageMeetingType"
@@ -18,15 +19,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+
     <TextView
-        android:id="@+id/textIncomingMeetingInvitation"
+        android:id="@+id/textSendingInvitation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4sdp"
         android:fontFamily="@font/ubuntu_medium"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:text="@string/incoming_meeting_invitation"
+        android:text="@string/sending_meeting_invitation"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintTop_toBottomOf="@+id/imageMeetingType"/>
@@ -77,24 +79,9 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageAcceptInvitation"
+        android:id="@+id/imageStopInvitation"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginStart="@dimen/_60sdp"
-        android:layout_marginBottom="@dimen/_50sdp"
-        android:background="@drawable/background_accept_invitation"
-        android:contentDescription="@string/app_name"
-        android:padding="@dimen/_8sdp"
-        android:src="@drawable/ic_accept"
-        android:tint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <ImageView
-        android:id="@+id/imageRejectInvitation"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_marginEnd="@dimen/_60sdp"
         android:layout_marginBottom="@dimen/_50sdp"
         android:background="@drawable/background_reject_invitation"
         android:contentDescription="@string/app_name"
@@ -102,6 +89,8 @@
         android:src="@drawable/ic_reject"
         android:tint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
