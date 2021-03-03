@@ -1,31 +1,14 @@
 package com.example.videomeeting.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.videomeeting.R;
 import com.example.videomeeting.models.User;
-import com.example.videomeeting.network.ApiClient;
-import com.example.videomeeting.network.ApiService;
-import com.example.videomeeting.utilities.Constants;
-import com.example.videomeeting.utilities.PreferenceManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class OutgoingInvitationActivity extends AppCompatActivity {
 
