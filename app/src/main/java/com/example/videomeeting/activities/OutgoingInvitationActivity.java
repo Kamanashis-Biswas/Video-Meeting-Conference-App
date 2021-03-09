@@ -178,10 +178,10 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
                         URL serverURL = new URL("https://meet.jit.si");
                         JitsiMeetConferenceOptions conferenceOptions =
                                 new JitsiMeetConferenceOptions.Builder()
-                                        .setServerURL(serverURL)
-                                        .setWelcomePageEnabled(false)
-                                        .setRoom(getIntent().getStringExtra(Constants.REMOTE_MSG_MEETING_ROOM))
-                                        .build();
+                                .setServerURL(serverURL)
+                                .setWelcomePageEnabled(false)
+                                .setRoom(meetingRoom)
+                                .build();
                         JitsiMeetActivity.launch(OutgoingInvitationActivity.this, conferenceOptions);
                         finish();
                     }catch (Exception exception){
