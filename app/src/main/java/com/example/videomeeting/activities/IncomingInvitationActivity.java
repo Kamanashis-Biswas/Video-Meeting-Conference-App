@@ -18,8 +18,12 @@ import com.example.videomeeting.network.ApiClient;
 import com.example.videomeeting.network.ApiService;
 import com.example.videomeeting.utilities.Constants;
 
+import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.net.URL;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,8 +39,8 @@ public class IncomingInvitationActivity extends AppCompatActivity {
         ImageView imageMeetingType = findViewById(R.id.imageMeetingType);
         String meetingType = getIntent().getStringExtra(Constants.REMOTE_MSG_MEETING_TYPE);
 
-        if (meetingType != null){
-            if (meetingType.equals("video")){
+        if (meetingType != null) {
+            if (meetingType.equals("video")) {
                 imageMeetingType.setImageResource(R.drawable.ic_video);
             }
         }
@@ -46,7 +50,7 @@ public class IncomingInvitationActivity extends AppCompatActivity {
         TextView textEmail = findViewById(R.id.textEmail);
 
         String fastName = getIntent().getStringExtra(Constants.KEY_FIRST_NAME);
-        if (fastName != null){
+        if (fastName != null) {
             textFastChar.setText(fastName.substring(0, 1));
         }
 
@@ -72,7 +76,7 @@ public class IncomingInvitationActivity extends AppCompatActivity {
 
     }
 
-    private void sendInvitationResponse(String type, String receiveToken){
+    private void sendInvitationResponse(String type, String receiveToken) {
         try {
             JSONArray tokens = new JSONArray();
             tokens.put(receiveToken);
@@ -86,37 +90,54 @@ public class IncomingInvitationActivity extends AppCompatActivity {
             body.put(Constants.REMOTE_MSG_DATA, data);
             body.put(Constants.REMOTE_MSG_REGISTRATION_IDS, tokens);
 
-            sendRemoteMessage(body.toString(),type);
+            sendRemoteMessage(body.toString(), type);
 
-        }catch (Exception exception){
-            Toast.makeText(this,  exception.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception exception) {
+            Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
 
-    private void sendRemoteMessage(String remoteMessageBody, String type){
+    private void sendRemoteMessage(String remoteMessageBody, String type) {
         ApiClient.getClient().create(ApiService.class).sendRemoteMessage(
                 Constants.getRemoteMessageHeaders(), remoteMessageBody
         ).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful()){
-                    if (type.equals(Constants.REMOTE_MSG_INVITATION_ACCEPTED)){
-                        Toast.makeText(IncomingInvitationActivity.this, "Invitation Accepted", Toast.LENGTH_SHORT).show();
-                    }else {
+                if (response.isSuccessful()) {
+                    if (type.equals(Constants.REMOTE_MSG_INVITATION_ACCEPTED)) {
+
+                        try {
+                            URL serverURL = new URL("https://meet.jit.si");
+                            JitsiMeetConferenceOptions conferenceOptions =
+                                    new JitsiMeetConferenceOptions.Builder()
+                                            .setServerURL(serverURL)
+                                            .setWelcomePageEnabled(false)
+                                            .setRoom(getIntent().getStringExtra(Constants.REMOTE_MSG_MEETING_ROOM))
+                                            .build();
+                            JitsiMeetActivity.launch(IncomingInvitationActivity.this, conferenceOptions);
+                            finish();
+
+                        } catch (Exception exception) {
+                            Toast.makeText(IncomingInvitationActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+
+                    } else {
                         Toast.makeText(IncomingInvitationActivity.this, "Invitation Rejected", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
 
-                }else {
+                } else {
                     Toast.makeText(IncomingInvitationActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-
+                    finish();
                 }
-                finish();
+
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call,@NonNull Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Toast.makeText(IncomingInvitationActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
